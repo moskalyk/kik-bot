@@ -1,6 +1,7 @@
 from flask import request, Response, Blueprint
 from ..easy_kik.Kik_Helper import Kik_Helper
 from ..credentials.username_api import username, api_key
+from ..translate.Translate import Translate
 
 kik_helper = Kik_Helper( username=username, api_key=api_key)
 main = Blueprint('main', __name__)
@@ -20,3 +21,8 @@ def config():
 @main.route('/incoming', methods=['POST'])
 def incoming():
     return kik_helper.send_messages(request)
+
+# @main.route('/translate', methods=['GET'])
+# def translate():
+# 	tr = Translate()
+# 	return Response(tr.translate('en','zh-CN', 'hello!'))

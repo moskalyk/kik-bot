@@ -2,10 +2,12 @@ import requests
 import json
 
 from kik.messages import TextMessage, TextResponse, \
-	SuggestedResponseKeyboard, messages_from_json
+	SuggestedResponseKeyboard, messages_from_json, VideoMessage
 from kik import KikApi, Configuration
 from flask import Response
 from ..stateless_engine.Engine import Engine
+
+from ..translate.Translate import Translate
 
 class Kik_Helper:
 	def __init__(self, username, api_key):
@@ -51,23 +53,48 @@ class Kik_Helper:
 		return Response(status=200)
 
 	def __choose_response(self, message):
-		messages = []
-		response = self.engine.computeResponse(message.body)
+		tr = Translate()
 
-		message = TextMessage(
-			to=message.from_user,
-			chat_id=message.chat_id,
-			body=response
-		)
+		translated_message = tr.translate('zh-CN', 'en', message.body)['data']['translations'][0]['translatedText']
+		print('translated_message', translated_message)
+		response, type = self.engine.computeResponse(translated_message)
+		kik_message = None
 
-		message.keyboards.append(
-			SuggestedResponseKeyboard(
-				hidden = False,
-				responses = [TextResponse('OK')]
+		if type is 'text':
+			print('Choose Response: text')
+			kik_message = TextMessage(
+				to=message.from_user,
+				chat_id=message.chat_id,
+				body=response['text']
 			)
-		)
 
-		messages.append(message)
+		elif type is 'buttons':
+			print('Choose Response: button')
 
-		return messages
+			kik_message = TextMessage(
+				to=message.from_user,
+				chat_id=message.chat_id,
+				body=response['attachment']['payload']['text']
+			)
+			buttons = []
+			for button in response['attachment']['payload']['buttons']:
+				buttons.append(TextResponse(button['title']))
+
+			kik_message.keyboards.append(
+				SuggestedResponseKeyboard(
+					hidden=False,
+					responses=buttons
+				)
+			)
+
+		elif type is 'image':
+			print('Choose Response: image')
+
+			kik_message = VideoMessage(
+				to=message.from_user,
+				chat_id=message.chat_id,
+				video_url=response['attachment']['payload']['url']
+			)
+
+		return [kik_message]
 

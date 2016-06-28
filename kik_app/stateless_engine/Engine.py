@@ -1,6 +1,5 @@
 from ..luis.Luis import Luis
 from ..faq.responses import faq
-import ruamel.yaml as yaml
 
 class Engine:
 	def __init__(self):
@@ -8,5 +7,17 @@ class Engine:
 
 	def computeResponse(self, message):
 		response = faq[self.luis.query(message)]
-		print(response)
-		return response['text']
+		print('Response', response)
+		for response_type in response:
+
+			if response_type is 'text':
+				return response, 'text'
+
+			elif response_type is 'attachment':
+
+				if response[response_type]['type'] is 'template':
+					return response, 'buttons'
+
+				elif response[response_type]['type'] is 'image':
+					return response, 'image'
+			break
