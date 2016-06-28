@@ -48,7 +48,7 @@ faq = {
     }
   },
    "pet_friendly":{
-    "text": "对不起, SomeCompany房屋和公寓不接受宠物 :'( "
+    "text": "对不起,  SomeCompany房屋和公寓不接受宠物 :'( "
   }
 }
 
