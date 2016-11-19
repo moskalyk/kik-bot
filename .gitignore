@@ -1,3 +1,5 @@
 .idea/
-venv/
-kik_app/credentials/**
+**/venv/
+**/tutorial_04/kik_app/credentials/**
+**/config.py
+**/.DS_Store
