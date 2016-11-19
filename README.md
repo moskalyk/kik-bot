@@ -3,7 +3,7 @@
 ##1. Python Installation
 
 You can download [Python 3.5.2 by going to the following Link](https://www.python.org/downloads/)
-Once python is installed, open up your Terminal (Mac) or Command Prompt (Windows) and type the following command to confirm that it is installed (command are always without the $ sign!).
+Once python is installed, open up your Terminal (Mac) or Command Prompt (Windows) and type the following command to confirm that it is installed (command are always without the $ sign!). WARNING: Make sure that if it asks you to add python to your PATH, agree viciously.
 
 ```
 $ python3 --version
