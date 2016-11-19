@@ -1,4 +1,4 @@
-#Deloitte Digital Gif Bot
+#Deloitte Digital Gif Bot Workshop
 
 ##1. Python Installation
 
